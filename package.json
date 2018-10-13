@@ -1,0 +1,17 @@
+{
+  "name": "hackathon2018",
+  "version": "1.0.0",
+  "description": "Repositories real time",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "nodejs",
+    "webhook",
+    "react",
+    "socketio"
+  ],
+  "author": "slam24<luismartinez242011@gmail.com>",
+  "license": "ISC"
+}
