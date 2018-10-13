@@ -13,5 +13,8 @@
     "socketio"
   ],
   "author": "slam24<luismartinez242011@gmail.com>",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
 }
