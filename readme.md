@@ -1,3 +1,5 @@
+heroku login
+
 heroku create
 
 heroku apps:rename slam24-notifications --app fathomless-island-26681
