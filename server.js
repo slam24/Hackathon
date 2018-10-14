@@ -1,18 +1,33 @@
 const express = require('express')
 const app = express()
+const http = require('http')
+const server = http.createServer(app)
+const io = require('socket.io').listen(server)
 
-var bodyParser = require('body-parser');
+const bodyParser = require('body-parser')
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(express.static('public'))
 
-var port = process.env.PORT || 3000
+const port = process.env.PORT || 3000
 
-app.get('/', (req, res) => res.send('Hello World!'))
-
-app.post('/listeningwebhook', function (req, res) {
-	console.log(req.body)
-	res.send('ok');
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/index.html')
 })
 
-app.listen(port, () => console.log('Example app listening on port 3000!'))
+io.on('connection', (socket) => {
+  console.log('a user connected')
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected')
+  })
+})
+
+app.post('/listeningwebhook', function (req, res) {
+  console.log(req.body)
+  io.emit('listening webhook', req.body);
+  res.send('ok')
+})
+
+server.listen(port, () => console.log('Example app listening on port 3000!'))
