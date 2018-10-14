@@ -26,7 +26,7 @@ io.on('connection', (socket) => {
 
 app.post('/listeningwebhook', function (req, res) {
   console.log(req.body)
-  io.emit('listening webhook', req.body);
+  io.emit('listening webhook', JSON.parse(req.body.payload));
   res.send('ok')
 })
 
