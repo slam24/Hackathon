@@ -6,7 +6,6 @@ const router = require('./server/routes.js')
 
 const app = express()
 const server = http.createServer(app)
-const io = require('socket.io').listen(server)
 const port = process.env.PORT || 3000
 
 app.use(bodyParser.json())

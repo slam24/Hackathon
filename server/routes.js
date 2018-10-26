@@ -1,5 +1,6 @@
 import express from 'express'
 import http from 'http'
+import path from 'path'
 import fetch from 'node-fetch'
 import 'dotenv/config';
 
@@ -10,7 +11,7 @@ const router = express.Router()
 const { initialQuery } = require('./queries.js')
 
 router.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html')
+  res.sendFile(path.join(__dirname+'./../public/client/index.html'))
 })
 
 router.get('/git', (req, res) => {
