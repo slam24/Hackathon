@@ -1,4 +1,159 @@
+var infolayout = `
+query {
+  organization(login: "IHack2018") {
+    name,
+    url,
+    teams(first:10) {
+      edges {
+        node {
+          id,
+          name
+        }
+      }
+    }
+  }
+}`
+
+var infodashboard = `
+query {
+  organization(login: "IHack2018") {
+    name,
+    url,
+    teams(first:10) {
+      totalCount,
+      edges {
+        node {
+          id,
+          name,
+          description,
+          members(first: 10){
+            totalCount,
+            edges{
+              node{
+                login,
+                name,
+                email,
+                avatarUrl
+              }
+            }
+          },
+          repositories(first:10){
+            totalCount,
+            edges{
+              node{
+                id,
+                name,
+                url,
+                description,
+                descriptionHTML,
+                ref(qualifiedName: "master") {
+                  target {
+                    ... on Commit {
+                      additions,
+                      history(first: 1) {
+                        totalCount
+                        edges {
+                          node {
+                            oid
+                            messageHeadline,
+                            committedDate,
+                            deletions,
+                            additions,
+                            committer {
+                              avatarUrl,
+                              email,
+                              name
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                languages(first: 10){
+                  edges{
+                    node{
+                      id,
+                      color,
+                      name
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}`
+
 var initialQuery = `
+query {
+  organization(login: "IHack2018") {
+    name,
+    url,
+    teams(first:10) {
+      totalCount,
+      edges {
+        node {
+          id,
+          name,
+          description,
+          members(first: 10){
+            totalCount,
+            edges{
+              node{
+                login,
+                name,
+                email,
+                avatarUrl
+              }
+            }
+          },
+          repositories(first:10){
+            edges{
+              node{
+                id,
+                name,
+                url,
+                description,
+                descriptionHTML,
+                ref(qualifiedName: "master") {
+                  target {
+                    ... on Commit {
+                      additions,
+                      history(first: 1) {
+                        totalCount
+                        edges {
+                          node {
+                            oid
+                            messageHeadline
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                languages(first: 10){
+                  edges{
+                    node{
+                      id,
+                      color,
+                      name
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}`
+
+var initialQuery1 = `
 query {
   organization(login: "IHack2018") {
     name,
@@ -132,4 +287,4 @@ query {
   }
 }`;
 
-export { initialQuery, testQuery };
+export { infolayout, infodashboard };
