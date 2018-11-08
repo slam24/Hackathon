@@ -2,3 +2,5 @@
 /public/client/
 package-lock.json
 .env
+client
+ngx-admin
