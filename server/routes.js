@@ -2,6 +2,7 @@ const express = require('express')
 const http = require('http')
 const path = require('path')
 const fetch = require('node-fetch')
+const admin = require("firebase-admin")
 require('dotenv').config()
 
 const app = express()
@@ -11,7 +12,6 @@ const server = http.createServer(app)
 const io = require('socket.io').listen(server)
 const router = express.Router()
 const { infolayout, infodashboard } = require('./queries.js')
-cosnt admin = require("firebase-admin");
 
 var whitelist = ['http://localhost:4200', 'http://localhost:3000', 'https://inatec-hackathon-2018.herokuapp.com']
 var corsOptions = {
