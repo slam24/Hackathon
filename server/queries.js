@@ -287,4 +287,7 @@ query {
   }
 }`;
 
-export { infolayout, infodashboard };
+module.exports = {
+    infolayout:infolayout,
+    infodashboard:infodashboard
+}
