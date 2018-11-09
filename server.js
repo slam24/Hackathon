@@ -1,6 +1,6 @@
-import express from 'express'
-import http from 'http'
-import bodyParser from 'body-parser'
+const express = require('express')
+const http = require('http')
+const bodyParser = require('body-parser')
 
 const router = require('./server/routes.js')
 

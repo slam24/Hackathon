@@ -1,7 +1,8 @@
-import express from 'express'
-import http from 'http'
-import path from 'path'
-import fetch from 'node-fetch'
+const express = require('express')
+const http = require('http')
+const path = require('path')
+const fetch = require('node-fetch')
+
 import 'dotenv/config';
 
 const app = express()
