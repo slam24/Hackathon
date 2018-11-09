@@ -287,4 +287,4 @@ query {
   }
 }`;
 
-export { infolayout, infodashboard };
+export default { infolayout, infodashboard };
