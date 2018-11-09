@@ -7,7 +7,7 @@ import { Organization } from '../shared/models/organization.model'
 })
 export class DataService {
 
-	private baseURL = 'http://localhost:3000';
+	private baseURL = 'https://inatec-hackathon-2018.herokuapp.com';
   constructor(private http: HttpClient) { }
 
   getInfoquery(query) {
