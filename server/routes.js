@@ -2,8 +2,7 @@ const express = require('express')
 const http = require('http')
 const path = require('path')
 const fetch = require('node-fetch')
-
-import 'dotenv/config';
+require('dotenv').config()
 
 const app = express()
 const cors = require('cors')
