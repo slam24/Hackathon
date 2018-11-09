@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 
 import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
+import { NotifierModule } from 'angular-notifier';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
     ChartsModule,
     BsDropdownModule,
     ButtonsModule.forRoot(),
-    CommonModule
+    CommonModule,
+    NotifierModule
   ],
   declarations: [ DashboardComponent ]
 })

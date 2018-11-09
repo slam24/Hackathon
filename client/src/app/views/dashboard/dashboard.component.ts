@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { Organization } from '../../shared/models/organization.model';
-/*import firebase from '@firebase/app';
-//import database from '@firebase/database';
-require("@firebase/database");*/
+import { NotifierService } from 'angular-notifier';
 
 import { AngularFireDatabase } from '@angular/fire/database';
 import { Observable } from 'rxjs';
@@ -19,18 +17,10 @@ export class DashboardComponent implements OnInit {
   public lastcommits: any[] = [];
   public app: any;
   public commitsFB: any;
+  private readonly notifier: NotifierService;
 
-
-  constructor(private data: DataService, db: AngularFireDatabase) {
-    /*this.app = firebase.initializeApp({
-        apiKey: "AIzaSyBKJD3-qsDYxuHm7PB73zyiI73T_Z95mw4",
-        authDomain: "hackathon2018-8ee72.firebaseapp.com",
-        databaseURL: "https://hackathon2018-8ee72.firebaseio.com",
-        projectId: "hackathon2018-8ee72",
-        storageBucket: "hackathon2018-8ee72.appspot.com",
-        messagingSenderId: "676134022628"
-    });*/
-
+  constructor(private data: DataService, db: AngularFireDatabase, notifierService: NotifierService ) {
+    this.notifier = notifierService;
     this.commitsFB  = db.list('commits');
     this.commitsFB.snapshotChanges(['child_added'])
     .subscribe(actions => {
@@ -38,26 +28,13 @@ export class DashboardComponent implements OnInit {
         if (action.type == 'child_added') {
           console.log(action.key);
           console.log(action.payload.val());
+          this.notifier.notify( 'warning', 'last commit' );
         }
       });
     });
-
   }
 
   ngOnInit() {
-    /*var ref = this.app.database().ref('commits');
-    console.log(ref)
-    ref.on('child_added', function(snap){
-      console.log(snap)
-    });
-
-    ref.on('child_changed', function(data) {
-      console.log(data)
-    });
-
-    ref.on('child_removed', function(data) {
-      console.log(data)
-    });*/
 
     this.data.getInfoquery('infodashboard').subscribe(
       data => {
