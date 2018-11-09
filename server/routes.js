@@ -72,7 +72,7 @@ io.on('connection', (socket) => {
 router.post('/listeningwebhook', function (req, res) {
   console.log(req.body)
   var usersRef = ref.child("commits");
-  usersRef.set(req.body);
+  usersRef.set(JSON.parse(req.body.payload).commits);
   io.emit('listening webhook', JSON.parse(req.body.payload))
   res.send('ok')
 })
