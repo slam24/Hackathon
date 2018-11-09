@@ -11,8 +11,9 @@ const server = http.createServer(app)
 const io = require('socket.io').listen(server)
 const router = express.Router()
 const { infolayout, infodashboard } = require('./queries.js')
+cosnt admin = require("firebase-admin");
 
-var whitelist = ['http://localhost:4200', 'http://localhost:3000']
+var whitelist = ['http://localhost:4200', 'http://localhost:3000', 'https://inatec-hackathon-2018.herokuapp.com']
 var corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
@@ -22,9 +23,18 @@ var corsOptions = {
     }
   }
 }
+var serviceAccount = require("../hackathon2018-8ee72-firebase-adminsdk-a65w8-ff81cdee22.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://hackathon2018-8ee72.firebaseio.com"
+});
+
+var db = admin.database();
+var ref = db.ref("/");
 
 router.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname+'./../public/client/index.html'))
+  res.sendFile(path.join(__dirname+'./../public/index.html'))
 })
 
 router.get('/infolayout', cors(corsOptions), (req, res) => {
@@ -61,6 +71,8 @@ io.on('connection', (socket) => {
 
 router.post('/listeningwebhook', function (req, res) {
   console.log(req.body)
+  var usersRef = ref.child("commits");
+  usersRef.set(req.body);
   io.emit('listening webhook', JSON.parse(req.body.payload))
   res.send('ok')
 })
