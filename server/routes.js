@@ -70,7 +70,6 @@ io.on('connection', (socket) => {
 })
 
 router.post('/listeningwebhook', function (req, res) {
-  console.log(req.body)
   var usersRef = ref.child("commits");
   if (JSON.parse(req.body.payload).head_commit.modified.length > 2) {
     usersRef.push().set(JSON.parse(req.body.payload).head_commit);

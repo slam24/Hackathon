@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { Organization } from '../../shared/models/organization.model';
+import firebase from '@firebase/app';
+//import database from '@firebase/database';
+require("@firebase/database");
 
 @Component({
   templateUrl: 'dashboard.component.html'
@@ -11,10 +14,35 @@ export class DashboardComponent implements OnInit {
   public members = 0;
   public commits = 0;
   public lastcommits: any[] = [];
+  public app: any;
 
-  constructor(private data: DataService) {}
+
+  constructor(private data: DataService) {
+    this.app = firebase.initializeApp({
+        apiKey: "AIzaSyBKJD3-qsDYxuHm7PB73zyiI73T_Z95mw4",
+        authDomain: "hackathon2018-8ee72.firebaseapp.com",
+        databaseURL: "https://hackathon2018-8ee72.firebaseio.com",
+        projectId: "hackathon2018-8ee72",
+        storageBucket: "hackathon2018-8ee72.appspot.com",
+        messagingSenderId: "676134022628"
+    });
+  }
 
   ngOnInit() {
+    var ref = this.app.database().ref('commits');
+    console.log(ref)
+    ref.on('child_added', function(snap){
+      console.log(snap)
+    });
+
+    ref.on('child_changed', function(data) {
+      console.log(data)
+    });
+
+    ref.on('child_removed', function(data) {
+      console.log(data)
+    });
+
     this.data.getInfoquery('infodashboard').subscribe(
       data => {
         var vm = this
