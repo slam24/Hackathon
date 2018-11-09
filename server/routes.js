@@ -34,7 +34,7 @@ var db = admin.database();
 var ref = db.ref("/");
 
 router.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname+'./../public/index.html'))
+  res.sendFile(path.join(__dirname+'./../public/client/index.html'))
 })
 
 router.get('/infolayout', cors(corsOptions), (req, res) => {

@@ -2,11 +2,11 @@ import {Deserializable} from "./deserializable.model";
 
 export class Teams implements Deserializable {
   totalCount: number;
-  edges: Team[];
+  edges: Team;
 
   deserialize(input: any) {
     Object.assign(this, input);
-    this.edges = new Team[]().deserialize(input.edges);
+    this.edges = new Team().deserialize(input.edges);
     return this;
   }
 }
