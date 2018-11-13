@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { Organization } from '../../shared/models/organization.model';
+import { Language } from '../../shared/models/language.model';
+
 import { NotifierService } from 'angular-notifier';
 
 import { AngularFireDatabase } from '@angular/fire/database';
@@ -15,6 +17,7 @@ export class DashboardComponent implements OnInit {
   public members = 0;
   public commits = 0;
   public lastcommits: any[] = [];
+  public languages: Language[] = [];
   public app: any;
   public commitsFB: any;
   private readonly notifier: NotifierService;
@@ -46,6 +49,22 @@ export class DashboardComponent implements OnInit {
           team.node.repositories.edges.forEach(repository => {
              vm.commits = vm.commits + repository.node.ref.target.history.totalCount
              vm.lastcommits.push(repository)
+             repository.node.languages.edges.forEach(language => {
+               if (vm.languages.length > 0) {
+                 if (vm.languages.find(s => s.id === language.node.id)) {
+                   let aux = vm.languages.find(s => s.id === language.node.id)
+                   let index = vm.languages.indexOf(aux);
+ 
+                   vm.languages[index].count++
+                 }else{
+                   language.node.count = 1
+                   vm.languages.push(language.node)
+                 }
+               }else{
+                   language.node.count = 1
+                   vm.languages.push(language.node)
+               }
+             });
           });
         });
       }
