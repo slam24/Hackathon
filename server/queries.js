@@ -7,12 +7,27 @@ query {
       edges {
         node {
           id,
-          name
+          name,
+          slug
         }
       }
     }
   }
 }`
+
+function infoteam(slug){
+  return  `
+  query {
+    organization(login: "IHack2018") {
+      name,
+      url,
+      team(slug: "${slug}") {
+        id,
+        name
+      }
+    }
+  }`
+}
 
 var infodashboard = `
 query {
@@ -289,5 +304,6 @@ query {
 
 module.exports = {
     infolayout:infolayout,
-    infodashboard:infodashboard
+    infodashboard:infodashboard,
+    infoteam: infoteam
 }

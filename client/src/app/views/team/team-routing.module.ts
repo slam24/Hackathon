@@ -6,7 +6,7 @@ import { TeamComponent } from './team.component';
 
 const routes: Routes = [
   {
-    path: ':id',
+    path: ':slug',
     component: TeamComponent,
     data: {
       title: 'Team'

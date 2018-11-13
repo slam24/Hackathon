@@ -11,7 +11,7 @@ app.use(express.static('public/'))
 const server = http.createServer(app)
 const io = require('socket.io').listen(server)
 const router = express.Router()
-const { infolayout, infodashboard } = require('./queries.js')
+const { infolayout, infodashboard, infoteam } = require('./queries.js')
 
 var whitelist = ['http://localhost:4200', 'http://localhost:3000', 'https://inatec-hackathon-2018.herokuapp.com']
 var corsOptions = {
@@ -53,6 +53,18 @@ router.get('/infodashboard', cors(corsOptions), (req, res) => {
   fetch('https://api.github.com/graphql', {
     method: 'POST',
     body: JSON.stringify({query: infodashboard}),
+    headers: {
+      'Authorization': `Bearer ${process.env.ACCESS_TOKEN_GITHUB}`,
+    },
+  }).then(res => res.text())
+  .then(body => res.send(JSON.parse(body).data))
+  .catch(error => console.error(error));
+})
+
+router.get('/infoteam', cors(corsOptions), (req, res) => {
+  fetch('https://api.github.com/graphql', {
+    method: 'POST',
+    body: JSON.stringify({query: infoteam(req.query.slug)}),
     headers: {
       'Authorization': `Bearer ${process.env.ACCESS_TOKEN_GITHUB}`,
     },

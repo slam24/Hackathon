@@ -30,7 +30,7 @@ export class DefaultLayoutComponent {
       data => {
         this.org = data['organization']
         data['organization']['teams']['edges'].forEach(team => {
-          navItems.push({name:team.node.name,url:'/team/'+team.node.id,icon:'fa fa-users'})
+          navItems.push({name:team.node.name,url:'/team/'+team.node.slug,icon:'fa fa-users'})
         });
       }
     );
