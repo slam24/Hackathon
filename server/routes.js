@@ -73,6 +73,41 @@ router.get('/infoteam', cors(corsOptions), (req, res) => {
   .catch(error => console.error(error));
 })
 
+router.get('/getMostCommiter', cors(corsOptions), async (req, res) => {
+
+  var repos = [ "Caribbean-Digital", "Caribbean-Digital2" ]
+  var aux = []
+
+   const total = await repos.forEach(function(repo) {
+
+    //https://anthonychu.ca/post/node-async-await-azure-app-service/
+    //https://medium.com/@Abazhenov/using-async-await-in-express-with-node-8-b8af872c0016
+    fetch('https://api.github.com/repos/IHack2018/'+repo+'/stats/contributors', {
+      method: 'GET',
+    }).then(res => res.text())
+    .then( body => {
+      JSON.parse(body).forEach(function(item) {
+        var add = 0;
+        var delete_ = 0;
+        item.weeks.forEach(function(week) {
+          add = add + week.a;
+          delete_ = delete_ + week.d;
+        })
+        aux.push({commits:item.total, add: add, delete: delete_, author: {login: item.author.login, avatar: item.author.avatar_url}});
+
+        console.log(aux)
+      })
+    })
+    .catch(error => console.error(error));
+
+
+  })
+     res.send(total)
+
+
+
+})
+
 io.on('connection', (socket) => {
   console.log('a user connected')
 
