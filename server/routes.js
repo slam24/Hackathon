@@ -93,8 +93,8 @@ router.get('/getMostCommiter', cors(corsOptions), (req, res) => {
         var delete_ = 0;
 
         item.weeks.forEach(function(week) {
-          add = add + week.a;
-          delete_ = delete_ + week.d;
+          add += week.a;
+          delete_ += week.d;
         })
 
         if (auxas.length > 0) {
@@ -102,9 +102,9 @@ router.get('/getMostCommiter', cors(corsOptions), (req, res) => {
             let aux = auxas.find(s => s.author.login === item.author.login)
             let index = auxas.indexOf(aux);
 
-            auxas[index].add = auxas[index].add + add
-            auxas[index].delete = auxas[index].delete + delete_
-            auxas[index].commits = auxas[index].commits + item.total
+            auxas[index].add += add
+            auxas[index].delete += delete_
+            auxas[index].commits += item.total
 
           }else{
             auxas.push({repository:repo, commits: item.total, add: add, delete: delete_, author: { login: item.author.login, avatar: item.author.avatar_url }});
