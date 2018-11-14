@@ -8,8 +8,6 @@ require('dotenv').config()
 const app = express()
 const cors = require('cors')
 app.use(express.static('public/'))
-const server = http.createServer(app)
-const io = require('socket.io').listen(server)
 const router = express.Router()
 const { infolayout, infodashboard, infoteam } = require('./queries.js')
 
@@ -73,47 +71,61 @@ router.get('/infoteam', cors(corsOptions), (req, res) => {
   .catch(error => console.error(error));
 })
 
-router.get('/getMostCommiter', cors(corsOptions), async (req, res) => {
+router.get('/getMostCommiter', cors(corsOptions), (req, res) => {
 
-  var repos = [ "Caribbean-Digital", "Caribbean-Digital2" ]
-  var aux = []
+  var repos = [ "Caribbean-Digital", "Caribbean-Digital2", "Elemental-Brainers", "Elemental-Brainers2", "DeathCode", "CodeBrain" ]
 
-   const total = await repos.forEach(function(repo) {
+  const start = async () => {
+   var auxas = []
+   var count = 0;
+   await repos.forEach(function(repo, index) {
 
-    //https://anthonychu.ca/post/node-async-await-azure-app-service/
-    //https://medium.com/@Abazhenov/using-async-await-in-express-with-node-8-b8af872c0016
     fetch('https://api.github.com/repos/IHack2018/'+repo+'/stats/contributors', {
       method: 'GET',
-    }).then(res => res.text())
+      headers: {
+        'Authorization': `Bearer ${process.env.ACCESS_TOKEN_GITHUB}`,
+      }
+    })
+    .then(res => res.text())
     .then( body => {
-      JSON.parse(body).forEach(function(item) {
+      JSON.parse(body).forEach(function(item, index) {
         var add = 0;
         var delete_ = 0;
+
         item.weeks.forEach(function(week) {
           add = add + week.a;
           delete_ = delete_ + week.d;
         })
-        aux.push({commits:item.total, add: add, delete: delete_, author: {login: item.author.login, avatar: item.author.avatar_url}});
 
-        console.log(aux)
-      })
+        if (auxas.length > 0) {
+          if (auxas.find(s => s.author.login === item.author.login)) {
+            let aux = auxas.find(s => s.author.login === item.author.login)
+            let index = auxas.indexOf(aux);
+
+            auxas[index].add = auxas[index].add + add
+            auxas[index].delete = auxas[index].delete + delete_
+            auxas[index].commits = auxas[index].commits + item.total
+
+          }else{
+            auxas.push({repository:repo, commits: item.total, add: add, delete: delete_, author: { login: item.author.login, avatar: item.author.avatar_url }});
+         }
+       }else{
+         auxas.push({repository:repo, commits:item.total, add: add, delete: delete_, author: { login: item.author.login, avatar: item.author.avatar_url }});
+       }
+
+     })
+
+      if (count === (repos.length -1)) {
+        res.send(auxas)
+      }
+      count++
+
     })
     .catch(error => console.error(error));
-
-
   })
-     res.send(total)
+ }
 
-
-
-})
-
-io.on('connection', (socket) => {
-  console.log('a user connected')
-
-  socket.on('disconnect', () => {
-    console.log('user disconnected')
-  })
+ start();
 })
 
 router.post('/listeningwebhook', function (req, res) {
@@ -121,7 +133,6 @@ router.post('/listeningwebhook', function (req, res) {
   if (JSON.parse(req.body.payload).head_commit.modified.length > 2) {
     usersRef.push().set(JSON.parse(req.body.payload).head_commit);
   }
-  io.emit('listening webhook', JSON.parse(req.body.payload))
   res.send('ok')
 })
 
