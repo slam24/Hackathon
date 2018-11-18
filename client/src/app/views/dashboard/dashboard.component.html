@@ -46,6 +46,33 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
+          Code
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="progress-group" *ngFor="let lang of languages">
+                <div class="progress-group-header">
+                  <i class="icon-user progress-group-icon"></i>
+                  <div>{{ lang.name }} - {{ lang.count }} <i class="fa fa-github"></i></div>
+                  <div class="ml-auto font-weight-bold">{{ ((lang.count/repositories)*100) | number }}%</div>
+                </div>
+                <div class="progress-group-bars">
+                  <div class="progress progress-xs">
+                    <div class="progress-bar" role="progressbar" [style.background-color]="lang.color" [style.width]="(((lang.count/repositories)*100) | number)+'%'" [attr.aria-valuenow]="(((lang.count/repositories)*100) | number)" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+              </div>
+            </div><!--/.col-->
+          </div><!--/.row-->
+        </div>
+      </div>
+    </div><!--/.col-->
+  </div><!--/.row-->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
           Last commits
         </div>
         <div class="card-body">
@@ -66,11 +93,10 @@
                 <td class="text-center">
                   <div class="avatar">
                     <img src="{{commit.node.ref.target.history.edges[0].node.committer.avatarUrl}}" class="img-avatar" alt="admin@bootstrapmaster.com">
-                    <span class="avatar-status badge-success"></span>
                   </div>
                 </td>
                 <td>
-                  {{ commit.node.name }}
+                  <a style="color: #000000;" href="{{commit.node.url}}">{{ commit.node.name }}</a>
                 </td>
                 <td>
                   <div>{{ commit.node.ref.target.history.edges[0].node.committer.name }}</div>
@@ -89,7 +115,7 @@
                 </td>
                 <td>
                   <div class="small text-muted">Last login</div>
-                  <strong>10 sec ago</strong>
+                  <strong>{{commit.node.ref.target.history.edges[0].node.committedDate | timeAgo}}</strong>
                 </td>
               </tr>
             </tbody>

@@ -41,6 +41,42 @@
           <h6>No settings</h6>
         </div>
       </tab>
+      <tab>
+        <ng-template tabHeading><i class="fa fa-area-chart"></i></ng-template>
+        <div class="p-3">
+          <h6>Get info</h6>
+          <div class="aside-options">
+            <div class="clearfix mt-4">
+              <small><b>Best committer</b></small>
+              <label class="switch switch-label switch-pill switch-success switch-sm float-right">
+                <button type="button" class="btn btn-sm btn-block btn-outline-success" (click)="getCommitters()">Get</button>
+              </label>
+            </div>
+            <div>
+              <small class="text-muted">Get the last committers with major frequency in the hackathon.</small>
+            </div>
+          </div>
+        </div>
+        <div class="list-group list-group-accent" *ngFor="let committer of bestCommitters; let i = index">
+
+          <div [className]="i == 0 ? 'list-group-item list-group-item-accent-warning list-group-item-divider' : i == 1 ? 'list-group-item list-group-item-accent-secondary list-group-item-divider' : i == 0 ? 'list-group-item list-group-item-accent-danger list-group-item-divider' : 'list-group-item list-group-item-accent-primary list-group-item-divider'">
+
+            <div class="avatar float-right">
+              <img class="img-avatar" src="{{committer.author.avatar}}" alt="{{committer.author.login}}">
+            </div>
+            <div>
+              <strong><a  style="color: black;" href="{{committer.author.url}}">{{ committer.author.login }}</a>&nbsp;<b style="color:#20a8d8;">{{ committer.commits }}</b>&nbsp;commits</strong>
+            </div>
+            <small class="text-success mr-3">
+              <i class="fa fa-plus"></i>&nbsp;{{ committer.add }}</small>
+            <small class="text-danger mr-3">
+              <i class="fa fa-minus"></i>&nbsp;{{ committer.delete }}</small>
+            <small class="text-warning">
+              <i class="fa fa-pencil"></i>&nbsp;{{ committer.change }}</small>
+          </div>
+
+        </div>
+      </tab>
     </tabset>
   </app-aside>
 </div>

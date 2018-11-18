@@ -7,5 +7,7 @@ export const environment = {
     projectId: "hackathon2018-8ee72",
     storageBucket: "hackathon2018-8ee72.appspot.com",
     messagingSenderId: "676134022628"
-  }
+  },
+  baseURL: "http://localhost:3000",
+  githubAPI: "https://api.github.com/repos"
 };

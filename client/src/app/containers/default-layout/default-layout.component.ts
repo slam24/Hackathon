@@ -13,6 +13,7 @@ export class DefaultLayoutComponent {
   private changes: MutationObserver;
   public element: HTMLElement = document.body;
   public org: Organization;
+  public bestCommitters: object;
 
   constructor(private data: DataService) {
 
@@ -32,6 +33,14 @@ export class DefaultLayoutComponent {
         data['organization']['teams']['edges'].forEach(team => {
           navItems.push({name:team.node.name,url:'/team/'+team.node.slug,icon:'fa fa-users'})
         });
+      }
+    );
+  }
+
+  getCommitters(){
+    this.data.getInfoquery('getMostCommiter').subscribe(
+      data => {
+        this.bestCommitters = data;
       }
     );
   }

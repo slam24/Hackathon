@@ -19,8 +19,6 @@ function infoteam(slug){
   return  `
   query {
     organization(login: "IHack2018") {
-      name,
-      url,
       team(slug: "${slug}") {
         id,
         name
@@ -32,35 +30,19 @@ function infoteam(slug){
 var infodashboard = `
 query {
   organization(login: "IHack2018") {
-    name,
-    url,
     teams(first:10) {
       totalCount,
       edges {
         node {
-          id,
-          name,
-          description,
           members(first: 10){
-            totalCount,
-            edges{
-              node{
-                login,
-                name,
-                email,
-                avatarUrl
-              }
-            }
+            totalCount
           },
           repositories(first:10){
             totalCount,
             edges{
               node{
-                id,
                 name,
-                url,
-                description,
-                descriptionHTML,
+                url
                 ref(qualifiedName: "master") {
                   target {
                     ... on Commit {
@@ -69,7 +51,6 @@ query {
                         totalCount
                         edges {
                           node {
-                            oid
                             messageHeadline,
                             committedDate,
                             deletions,

@@ -91,10 +91,12 @@ router.get('/getMostCommiter', cors(corsOptions), (req, res) => {
       JSON.parse(body).forEach(function(item, index) {
         var add = 0;
         var delete_ = 0;
+        var change = 0;
 
         item.weeks.forEach(function(week) {
           add += week.a;
           delete_ += week.d;
+          change += week.c;
         })
 
         if (auxas.length > 0) {
@@ -104,19 +106,23 @@ router.get('/getMostCommiter', cors(corsOptions), (req, res) => {
 
             auxas[index].add += add
             auxas[index].delete += delete_
+            auxas[index].change += change
             auxas[index].commits += item.total
 
           }else{
-            auxas.push({repository:repo, commits: item.total, add: add, delete: delete_, author: { login: item.author.login, avatar: item.author.avatar_url }});
+            auxas.push({commits: item.total, add: add, delete: delete_, change: change, author: { login: item.author.login, url: item.author.html_url, avatar: item.author.avatar_url }});
          }
        }else{
-         auxas.push({repository:repo, commits:item.total, add: add, delete: delete_, author: { login: item.author.login, avatar: item.author.avatar_url }});
+         auxas.push({commits:item.total, add: add, delete: delete_, change: change, author: { login: item.author.login, url: item.author.html_url, avatar: item.author.avatar_url }});
        }
 
      })
 
       if (count === (repos.length -1)) {
-        res.send(auxas)
+        auxas.sort(function(a, b) {
+          return parseFloat(String(b.commits)) - parseFloat(String(a.commits))
+        });
+        res.send(auxas.splice(0,10))
       }
       count++
 

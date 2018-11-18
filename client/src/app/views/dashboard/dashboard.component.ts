@@ -42,13 +42,13 @@ export class DashboardComponent implements OnInit {
     this.data.getInfoquery('infodashboard').subscribe(
       data => {
         var vm = this
-        this.teams = data['organization']['teams'].totalCount
+        vm.teams = data['organization']['teams'].totalCount
         data['organization']['teams']['edges'].forEach(team => {
-          vm.members = this.members + team.node.members.totalCount
-          vm.repositories = this.repositories + team.node.repositories.totalCount
+          vm.members += team.node.members.totalCount
+          vm.repositories += team.node.repositories.totalCount
           team.node.repositories.edges.forEach(repository => {
-             vm.commits = vm.commits + repository.node.ref.target.history.totalCount
-             vm.lastcommits.push(repository)
+             vm.commits += repository.node.ref.target.history.totalCount //<-
+             vm.lastcommits.push(repository) //<-
              repository.node.languages.edges.forEach(language => {
                if (vm.languages.length > 0) {
                  if (vm.languages.find(s => s.id === language.node.id)) {
@@ -66,6 +66,9 @@ export class DashboardComponent implements OnInit {
                }
              });
           });
+        });
+        vm.languages.sort(function(a, b) {
+          return parseFloat(String(b.count)) - parseFloat(String(a.count))
         });
       }
     );
