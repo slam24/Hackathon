@@ -20,8 +20,39 @@ function infoteam(slug){
   query {
     organization(login: "IHack2018") {
       team(slug: "${slug}") {
-        id,
-        name
+        members(first: 10){
+          totalCount,
+          edges{
+            node{
+              login,
+              name,
+              email,
+              avatarUrl,
+              bio,
+              url,
+              createdAt
+            }
+          }
+        },
+        repositories(first:10){
+          totalCount,
+          edges{
+            node{
+              name,
+              url,
+              description,
+              updatedAt,
+              languages(first: 10){
+                edges{
+                  node{
+                    color,
+                    name
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   }`

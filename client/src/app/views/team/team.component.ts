@@ -9,26 +9,29 @@ import * as c3 from 'c3';
   templateUrl: 'team.component.html'
 })
 export class TeamComponent implements OnInit {
+  public repositories: object;
+  public members: object;
 
   constructor(private data: DataService, private route: ActivatedRoute,) {}
 
   ngOnInit() {
     this.data.getInfoqueryById('infoteam', this.route.snapshot.paramMap.get('slug')).subscribe(
       data => {
-        console.log(data)
+        this.repositories = data['organization']['team']['repositories']['edges']
+        this.members = data['organization']['team']['members']['edges']
       }
     );
   }
 
-ngAfterViewInit() {
-    let chart = c3.generate({
-    bindto: '#chart',
-        data: {
-            columns: [
-                ['data1', 30, 200, 100, 400, 150, 250],
-                ['data2', 50, 20, 10, 40, 15, 25]
-            ]
-        }
-    });
-}
+  ngAfterViewInit() {
+      let chart = c3.generate({
+      bindto: '#chart',
+          data: {
+              columns: [
+                  ['data1', 30, 200, 100, 400, 150, 250],
+                  ['data2', 50, 20, 10, 40, 15, 25]
+              ]
+          }
+      });
+  }
 }
