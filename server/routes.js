@@ -9,7 +9,7 @@ const app = express()
 const cors = require('cors')
 app.use(express.static('public/'))
 const router = express.Router()
-const { infolayout, infodashboard, infoteam } = require('./queries.js')
+const { testQuery, infolayout, infodashboard, infoteam } = require('./queries.js')
 
 var whitelist = ['http://localhost:4200', 'http://localhost:3000', 'https://inatec-hackathon-2018.herokuapp.com']
 var corsOptions = {
@@ -33,6 +33,18 @@ var ref = db.ref("/");
 
 router.get('/', (req, res) => {
   res.sendFile(path.join(__dirname+'./../public/client/index.html'))
+})
+
+router.get('/test', cors(corsOptions), (req, res) => {
+  fetch('https://api.github.com/graphql', {
+    method: 'POST',
+    body: JSON.stringify({query: testQuery(req.query.first, req.query.after, req.query.before)}),
+    headers: {
+      'Authorization': `Bearer ${process.env.ACCESS_TOKEN_GITHUB}`,
+    },
+  }).then(res => res.text())
+  .then(body => res.send(JSON.parse(body).data))
+  .catch(error => console.error(error));
 })
 
 router.get('/infolayout', cors(corsOptions), (req, res) => {

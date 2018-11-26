@@ -251,71 +251,47 @@ query {
   }
 }`
 
-var testQuery =  `
-query {
-  viewer {
-    login
-    name
-    url
-  },
-  organization(login: "IHack2018") {
-    name,
-    url,
-    teams(first:1) {
-      edges {
-        node {
-          name,
-          description,
-          repositories(first:1){
-            edges{
-              node{
-                name,
-                description,
-                ref(qualifiedName: "master") {
-                  target {
-                    ... on Commit {
-                      additions,
-                      history(first: 1) {
-                        edges {
-                          node {
-                            oid
-                            messageHeadline
-                          }
-                        }
-                      }
-                    }
+function testQuery(first = 10, after = null, before = null){
+  return `
+  query {
+    repository(name: "Caribbean-Digital2", owner: "IHack2018") {
+      ref(qualifiedName: "master") {
+        id,
+        target {
+          ... on Commit {
+            id,
+            history(first: ${first} after:${after} before:${before}) {
+              totalCount,
+              pageInfo {
+                startCursor,
+                hasNextPage,
+                endCursor
+              }
+              edges {
+                node {
+                  additions,
+                  messageHeadline
+                  oid
+                  message
+                  author {
+                    name
+                    email
+                    date
                   }
                 },
-                owner{
-                  login
-                  id
-                  __typename
-                  url
-                },
-                assignableUsers{
-                  totalCount
-                },
-                languages(first: 10){
-                  edges{
-                    node{
-                      id,
-                      color,
-                      name
-                    }
-                  }
-                },
-                pushedAt
+                cursor
               }
             }
           }
         }
       }
     }
-  }
-}`;
+  }`
+}
 
 module.exports = {
     infolayout:infolayout,
     infodashboard:infodashboard,
-    infoteam: infoteam
+    infoteam: infoteam,
+    testQuery: testQuery
 }
