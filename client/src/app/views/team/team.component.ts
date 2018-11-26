@@ -11,6 +11,7 @@ import * as c3 from 'c3';
 export class TeamComponent implements OnInit {
   public repositories: object;
   public members: object;
+  public graph: object;
 
   constructor(private data: DataService, private route: ActivatedRoute,) {}
 
@@ -24,14 +25,29 @@ export class TeamComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-      let chart = c3.generate({
-      bindto: '#chart',
-          data: {
-              columns: [
-                  ['data1', 30, 200, 100, 400, 150, 250],
-                  ['data2', 50, 20, 10, 40, 15, 25]
-              ]
-          }
-      });
+
+  }
+
+  getGrahp(repo){
+    console.log(repo)
+    this.data.getGraph('getGraph', 20, null, null).subscribe(
+      data => {
+        var aux = []
+        aux.push(repo)
+        data['repository']['ref']['target']['history']['edges'].forEach(commit => {
+          aux.push(commit.node.additions)
+        })
+
+        let chart = c3.generate({
+        bindto: '#chart',
+            data: {
+                columns: [
+                    ['data1', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    aux
+                ]
+            }
+        });
+      }
+    );
   }
 }

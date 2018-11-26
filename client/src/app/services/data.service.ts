@@ -18,4 +18,12 @@ export class DataService {
       slug: slug
     }})
   }
+
+  getGraph(query, first, before, after){
+    return this.http.get<Organization>(environment.baseURL+'/'+query, {params: {
+      first: first,
+      before: before,
+      after: after
+    }})
+  }
 }

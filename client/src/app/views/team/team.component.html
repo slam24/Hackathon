@@ -10,7 +10,7 @@
             <div class="col-sm-6 col-md-4" *ngFor="let repo of repositories">
               <div class="card border-primary">
                 <div class="card-header">
-                  <strong>{{ repo.node.name }}</strong>&nbsp;-&nbsp;Updated&nbsp; {{ repo.node.updatedAt | timeAgo }}
+                  <strong>{{ repo.node.name }}</strong>&nbsp;-&nbsp;Updated&nbsp; {{ repo.node.updatedAt | timeAgo }}&nbsp;<a style="cursor: pointer; color: #00a030" (click)="getGrahp(repo.node.name)">get Commits</a>
                 </div>
                 <div class="card-body">
                   {{ repo.node.description }}
@@ -30,11 +30,25 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
+          Commits
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div id="chart"></div>
+          </div><!--/.row-->
+        </div>
+      </div>
+    </div><!--/.col-->
+  </div><!--/.row-->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
           Members
         </div>
         <div class="card-body">
           <div class="row">
-            <!--<div id="chart"></div>-->
+            <div id="chart"></div>
           </div><!--/.row-->
           <br>
           <table class="table table-responsive-sm table-hover table-outline mb-0">

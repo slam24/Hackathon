@@ -251,7 +251,7 @@ query {
   }
 }`
 
-function testQuery(first = 10, after = null, before = null){
+function getGraph(first = 10, after = null, before = null){
   return `
   query {
     repository(name: "Caribbean-Digital2", owner: "IHack2018") {
@@ -293,5 +293,5 @@ module.exports = {
     infolayout:infolayout,
     infodashboard:infodashboard,
     infoteam: infoteam,
-    testQuery: testQuery
+    getGraph: getGraph
 }
