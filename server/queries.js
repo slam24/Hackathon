@@ -251,10 +251,16 @@ query {
   }
 }`
 
-function getGraph(first = 10, after = null, before = null){
+function getGraph(repo, first = 10, after = null, before = null){
+  console.log(after)
+  console.log(before)
+  after = after == null ? null : '"'+after+'"'
+  before = before == null ? null : '"'+before+'"'
+  console.log(after)
+  console.log(before)
   return `
   query {
-    repository(name: "Caribbean-Digital2", owner: "IHack2018") {
+    repository(name: "${repo}", owner: "IHack2018") {
       ref(qualifiedName: "master") {
         id,
         target {

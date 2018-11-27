@@ -11,7 +11,13 @@ import * as c3 from 'c3';
 export class TeamComponent implements OnInit {
   public repositories: object;
   public members: object;
-  public graph: object;
+  public columns: any[] = [];
+  public graph = false;
+  public repo: string;
+  private after: string = null;
+  private before: string = null;
+  private limit: number = 5;
+  private pageInfo: object;
 
   constructor(private data: DataService, private route: ActivatedRoute,) {}
 
@@ -24,28 +30,66 @@ export class TeamComponent implements OnInit {
     );
   }
 
-  ngAfterViewInit() {
+  getGrahp(repo){
+    this.repo = repo
+    this.graph = true;
+    var aux = true
+    this.columns.forEach(graph => {
+      if (graph[0] == repo) {
+        aux = false
+      }
+    })
+
+    if (aux) {
+      this.data.getGraph('getGraph', repo, this.limit, this.after, this.before).subscribe(
+        data => {
+          var aux = []
+          aux.push(repo)
+          this.pageInfo =  data['repository']['ref']['target']['history']['pageInfo']
+          data['repository']['ref']['target']['history']['edges'].forEach(commit => {
+            aux.push(commit.node.additions)
+          })
+
+          this.columns.push(aux)
+
+          let chart = c3.generate({
+            bindto: '#chart',
+            data: {
+              columns: this.columns 
+            }
+          });
+        }
+      );
+    }
+  }
+
+  previous(){
 
   }
 
-  getGrahp(repo){
-    console.log(repo)
-    this.data.getGraph('getGraph', 20, null, null).subscribe(
+  next(repo){
+    this.after = this.pageInfo['endCursor']
+    this.loadGraph(repo)
+  }
+
+  loadGraph(repo){
+    this.data.getGraph('getGraph', repo, this.limit, this.before, this.after).subscribe(
       data => {
         var aux = []
+        this.columns = []
         aux.push(repo)
+        this.pageInfo =  data['repository']['ref']['target']['history']['pageInfo']
         data['repository']['ref']['target']['history']['edges'].forEach(commit => {
           aux.push(commit.node.additions)
         })
 
+        this.columns.push(aux)
+
         let chart = c3.generate({
-        bindto: '#chart',
-            data: {
-                columns: [
-                    ['data1', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                    aux
-                ]
-            }
+          bindto: '#chart',
+          data: {
+            columns: this.columns 
+          }
         });
       }
     );
