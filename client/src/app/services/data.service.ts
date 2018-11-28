@@ -19,10 +19,11 @@ export class DataService {
     }})
   }
 
-  getGraph(query, repo, first, before, after){
+  getGraph(query, repo, first, last, before, after){
     return this.http.get<Organization>(environment.baseURL+'/'+query, {params: {
       repo: repo,
       first: first,
+      last: last,
       before: before,
       after: after
     }})

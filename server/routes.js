@@ -38,7 +38,7 @@ router.get('/', (req, res) => {
 router.get('/getGraph', cors(corsOptions), (req, res) => {
   fetch('https://api.github.com/graphql', {
     method: 'POST',
-    body: JSON.stringify({query: getGraph(req.query.repo, req.query.first, req.query.after, req.query.before)}),
+    body: JSON.stringify({query: getGraph(req.query.repo, req.query.first, req.query.last, req.query.after, req.query.before)}),
     headers: {
       'Authorization': `Bearer ${process.env.ACCESS_TOKEN_GITHUB}`,
     },

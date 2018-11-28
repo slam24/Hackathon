@@ -251,13 +251,9 @@ query {
   }
 }`
 
-function getGraph(repo, first = 10, after = null, before = null){
-  console.log(after)
-  console.log(before)
-  after = after == null ? null : '"'+after+'"'
-  before = before == null ? null : '"'+before+'"'
-  console.log(after)
-  console.log(before)
+function getGraph(repo, first = null, last = null, after = null, before = null){
+  if (String(after) != 'null') after = '"'+after+'"'
+  if (String(before) != 'null') before = '"'+before+'"'
   return `
   query {
     repository(name: "${repo}", owner: "IHack2018") {
@@ -266,7 +262,7 @@ function getGraph(repo, first = 10, after = null, before = null){
         target {
           ... on Commit {
             id,
-            history(first: ${first} after:${after} before:${before}) {
+            history(first: ${first} last: ${last} after:${after} before:${before}) {
               totalCount,
               pageInfo {
                 startCursor,
@@ -283,7 +279,8 @@ function getGraph(repo, first = 10, after = null, before = null){
                     name
                     email
                     date
-                  }
+                  },
+                  pushedDate
                 },
                 cursor
               }

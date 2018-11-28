@@ -14,9 +14,11 @@ export class TeamComponent implements OnInit {
   public columns: any[] = [];
   public graph = false;
   public repo: string;
+  private first: number = 100;
+  private last: number = null;
   private after: string = null;
   private before: string = null;
-  private limit: number = 5;
+  private limit: number = 100;
   private pageInfo: object;
 
   constructor(private data: DataService, private route: ActivatedRoute,) {}
@@ -41,39 +43,51 @@ export class TeamComponent implements OnInit {
     })
 
     if (aux) {
-      this.data.getGraph('getGraph', repo, this.limit, this.after, this.before).subscribe(
+      if (this.before || this.after) {
+        this.clear()
+      }
+      this.data.getGraph('getGraph', repo, this.first, this.last, this.after, this.before).subscribe(
         data => {
-          var aux = []
-          aux.push(repo)
-          this.pageInfo =  data['repository']['ref']['target']['history']['pageInfo']
-          data['repository']['ref']['target']['history']['edges'].forEach(commit => {
-            aux.push(commit.node.additions)
-          })
+          if (data['repository']['ref'] != null) {
+            var aux = []
+            aux.push(repo)
+            this.pageInfo =  data['repository']['ref']['target']['history']['pageInfo']
+            data['repository']['ref']['target']['history']['edges'].forEach(commit => {
+              aux.push(commit.node.additions)
+            })
 
-          this.columns.push(aux)
+            this.columns.push(aux)
 
-          let chart = c3.generate({
-            bindto: '#chart',
-            data: {
-              columns: this.columns 
-            }
-          });
+            let chart = c3.generate({
+              bindto: '#chart',
+              data: {
+                columns: this.columns 
+              }
+            });
+          }
         }
       );
     }
   }
 
-  previous(){
-
+  previous(repo){
+    this.before = this.pageInfo['startCursor']
+    this.after = null
+    this.last = this.limit
+    this.first = null
+    this.loadGraph(repo)
   }
 
   next(repo){
     this.after = this.pageInfo['endCursor']
+    this.before = null
+    this.last = null
+    this.first = this.limit
     this.loadGraph(repo)
   }
 
   loadGraph(repo){
-    this.data.getGraph('getGraph', repo, this.limit, this.before, this.after).subscribe(
+    this.data.getGraph('getGraph', repo, this.first, this.last, this.before, this.after).subscribe(
       data => {
         var aux = []
         this.columns = []
@@ -93,5 +107,19 @@ export class TeamComponent implements OnInit {
         });
       }
     );
+  }
+
+  clear(){
+    this.before = null
+    this.after = null
+    this.last = null
+    this.first = 5
+    this.columns = []
+    let chart = c3.generate({
+      bindto: '#chart',
+      data: {
+        columns: this.columns 
+      }
+    });
   }
 }
