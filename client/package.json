@@ -41,6 +41,8 @@
     "@coreui/coreui": "^2.0.20",
     "@coreui/coreui-plugin-chartjs-custom-tooltips": "^1.2.0",
     "@coreui/icons": "0.3.0",
+    "@ngrx/core": "^1.2.0",
+    "@ngrx/store": "^6.1.2",
     "@types/c3": "^0.6.2",
     "@types/socket.io-client": "^1.4.32",
     "angular-notifier": "^4.1.1",

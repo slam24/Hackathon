@@ -2,11 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { Organization } from '../../shared/models/organization.model';
 import { Language } from '../../shared/models/language.model';
+import { Store } from '@ngrx/store';
 
 import { NotifierService } from 'angular-notifier';
 
 import { AngularFireDatabase } from '@angular/fire/database';
 import { Observable } from 'rxjs';
+
+export interface AppState {
+  readonly blockchain: any[];
+}
 
 @Component({
   templateUrl: 'dashboard.component.html'
@@ -21,8 +26,9 @@ export class DashboardComponent implements OnInit {
   public app: any;
   public commitsFB: any;
   private readonly notifier: NotifierService;
+  private coins: Observable<any[]>;
 
-  constructor(private data: DataService, db: AngularFireDatabase, notifierService: NotifierService ) {
+  constructor(private data: DataService, db: AngularFireDatabase, notifierService: NotifierService, private store: Store<AppState> ) {
     this.notifier = notifierService;
     this.commitsFB  = db.list('commits');
     this.commitsFB.snapshotChanges(['child_added'])
@@ -35,6 +41,8 @@ export class DashboardComponent implements OnInit {
         }
       });
     });
+
+    this.coins = this.store.select(state => state.blockchain);
   }
 
   ngOnInit() {

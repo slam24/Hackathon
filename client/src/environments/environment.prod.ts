@@ -9,5 +9,6 @@ export const environment = {
     messagingSenderId: "676134022628"
   },
   baseURL: "http://localhost:3000",
-  githubAPI: "https://api.github.com/repos"
+  githubAPI: "https://api.github.com/repos",
+  organization: "IHack2018"
 };

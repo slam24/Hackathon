@@ -45,6 +45,8 @@ import { AngularFireModule } from '@angular/fire';
 import { environment } from '../environments/environment';
 
 import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { StoreModule } from '@ngrx/store';
+import { addCoinReducer } from './reducers/blockchain.reducer';
 
 @NgModule({
   imports: [
@@ -61,7 +63,8 @@ import { AngularFireDatabaseModule } from '@angular/fire/database';
     ChartsModule,
     HttpClientModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFireDatabaseModule
+    AngularFireDatabaseModule,
+    StoreModule.forRoot({blockchain: addCoinReducer}),
   ],
   declarations: [
     AppComponent,

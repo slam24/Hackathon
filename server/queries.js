@@ -8,7 +8,15 @@ query {
         node {
           id,
           name,
-          slug
+          slug,
+          repositories(first:10){
+            totalCount,
+            edges{
+              node{
+                name
+              }
+            }
+          }
         }
       }
     }

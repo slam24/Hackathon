@@ -2,6 +2,12 @@ import { Component, Input } from '@angular/core';
 import { navItems } from './../../_nav';
 import { DataService } from '../../services/data.service';
 import { Organization } from '../../shared/models/organization.model';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
+
+export interface AppState {
+  readonly blockchain: any[];
+}
 
 @Component({
   selector: 'app-dashboard',
@@ -14,8 +20,9 @@ export class DefaultLayoutComponent {
   public element: HTMLElement = document.body;
   public org: Organization;
   public bestCommitters: object;
+  private coins: Observable<any[]>;
 
-  constructor(private data: DataService) {
+  constructor(private data: DataService, private store: Store<AppState>) {
 
     this.changes = new MutationObserver((mutations) => {
       this.sidebarMinimized = document.body.classList.contains('sidebar-minimized');
@@ -24,13 +31,23 @@ export class DefaultLayoutComponent {
     this.changes.observe(<Element>this.element, {
       attributes: true
     });
+
   }
 
   ngOnInit() {
+    this.coins = this.store.select(state => state.blockchain);
+
     this.data.getInfoquery('infolayout').subscribe(
       data => {
         this.org = data['organization']
         data['organization']['teams']['edges'].forEach(team => {
+          this.store.dispatch({
+            type: 'ADD_COIN',
+            payload: <any> {
+              name: team.node.name,
+              repos: team.node.repositories
+            }
+          });
           navItems.push({name:team.node.name,url:'/team/'+team.node.slug,icon:'fa fa-users'})
         });
       }
