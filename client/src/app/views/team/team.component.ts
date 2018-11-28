@@ -21,16 +21,24 @@ export class TeamComponent implements OnInit {
   private limit: number = 100;
   private pageInfo: object;
 
-  constructor(private data: DataService, private route: ActivatedRoute,) {}
-
-  ngOnInit() {
-    this.data.getInfoqueryById('infoteam', this.route.snapshot.paramMap.get('slug')).subscribe(
-      data => {
-        this.repositories = data['organization']['team']['repositories']['edges']
-        this.members = data['organization']['team']['members']['edges']
-      }
-    );
+  constructor(private data: DataService, private route: ActivatedRoute) {
+    route.params.subscribe(val => {
+      this.data.getInfoqueryById('infoteam', this.route.snapshot.paramMap.get('slug')).subscribe(
+        data => {
+          this.repositories = data['organization']['team']['repositories']['edges']
+          this.members = data['organization']['team']['members']['edges']
+        }
+      );
+      this.before = null
+      this.after = null
+      this.last = null
+      this.first = 100
+      this.columns = []
+      this.graph = false
+    });
   }
+
+  ngOnInit() {}
 
   getGrahp(repo){
     this.repo = repo
@@ -55,6 +63,10 @@ export class TeamComponent implements OnInit {
             data['repository']['ref']['target']['history']['edges'].forEach(commit => {
               aux.push(commit.node.additions)
             })
+
+            aux.sort(function(a, b) {
+              return parseFloat(String(b)) - parseFloat(String(a))
+            });
 
             this.columns.push(aux)
 
@@ -97,6 +109,10 @@ export class TeamComponent implements OnInit {
           aux.push(commit.node.additions)
         })
 
+        aux.sort(function(a, b) {
+          return parseFloat(String(b)) - parseFloat(String(a))
+        });
+
         this.columns.push(aux)
 
         let chart = c3.generate({
@@ -113,7 +129,7 @@ export class TeamComponent implements OnInit {
     this.before = null
     this.after = null
     this.last = null
-    this.first = 5
+    this.first = 100
     this.columns = []
     let chart = c3.generate({
       bindto: '#chart',
