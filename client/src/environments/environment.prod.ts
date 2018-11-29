@@ -8,7 +8,7 @@ export const environment = {
     storageBucket: "hackathon2018-8ee72.appspot.com",
     messagingSenderId: "676134022628"
   },
-  baseURL: "https://inatec-hackathon-2018.herokuapp.com/",
+  baseURL: "https://inatec-hackathon-2018.herokuapp.com",
   githubAPI: "https://api.github.com/repos",
   organization: "IHack2018"
 };
