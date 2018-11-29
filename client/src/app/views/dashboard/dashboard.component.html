@@ -1,6 +1,5 @@
 <div class="animated fadeIn">
   <notifier-container></notifier-container>
-  <!--<li *ngFor="let coin of coins | async">{{ coin.name }} <p *ngFor="let x of coin.repos.edges">{{ x.node.name }}</p></li>-->
   <div class="row">
     <div class="col-6 col-lg-3">
       <div class="card">
@@ -74,6 +73,30 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
+          Commits
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <ng-select [(ngModel)]="selectedSimpleItem">
+                    <ng-option *ngFor="let coin of coins | async" [value]="coin.repo">{{coin.repo}}</ng-option>
+                </ng-select>
+                <button class="btn btn-primary" style="float: right" (click)="loadGraph()">Get</button>
+              </div>
+            </div><!--/.col-->
+          </div><!--/.row-->
+          <div class="row">
+            <div id="chart"></div>
+          </div>
+        </div>
+      </div>
+    </div><!--/.col-->
+  </div><!--/.row-->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
           Last commits
         </div>
         <div class="card-body">
@@ -97,7 +120,7 @@
                   </div>
                 </td>
                 <td>
-                  <a style="color: #000000;" href="{{commit.node.url}}">{{ commit.node.name }}</a>
+                  <a style="color: #000000;" target="__blank" href="{{commit.node.url}}/commits/master">{{ commit.node.name }}</a>
                 </td>
                 <td>
                   <div>{{ commit.node.ref.target.history.edges[0].node.committer.name }}</div>

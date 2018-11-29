@@ -40,15 +40,18 @@ export class DefaultLayoutComponent {
     this.data.getInfoquery('infolayout').subscribe(
       data => {
         this.org = data['organization']
+        var aux = []
         data['organization']['teams']['edges'].forEach(team => {
-          this.store.dispatch({
-            type: 'ADD_COIN',
-            payload: <any> {
-              name: team.node.name,
-              repos: team.node.repositories
-            }
-          });
+
+          team.node.repositories.edges.forEach(repo =>{
+            aux.push({'repo':team.node.name+' '+repo.node.name})
+          })
           navItems.push({name:team.node.name,url:'/team/'+team.node.slug,icon:'fa fa-users'})
+        });
+
+        this.store.dispatch({
+          type: 'ADD_COIN',
+          payload: <any> aux
         });
       }
     );

@@ -37,13 +37,13 @@
             <div id="chart"></div>
           </div>
           <div class="row" *ngIf="columns.length == 1">
-            <div class="col-md-4 text-center" style="padding-top: 5px;">
+            <div class="col-md-4 col-xs-4 text-center" style="padding-top: 5px;">
               <button style="margin-left: 5px;" class="btn btn-primary" (click)="previous(repo)">Previous</button>
               <button style="margin-left: 5px;" class="btn btn-primary" (click)="next(repo)">Next</button>
             </div>
           </div>
           <div class="row" *ngIf="columns.length > 1">
-            <div class="col-md-4 text-center" style="padding-top: 5px;">
+            <div class="col-md-4 col-xs-4 text-center" style="padding-top: 5px;">
               <button style="margin-left: 5px;" class="btn btn-primary" (click)="clear()">Clear</button>
             </div>
           </div>

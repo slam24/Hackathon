@@ -148,7 +148,7 @@ router.get('/getMostCommiter', cors(corsOptions), (req, res) => {
 
 router.post('/listeningwebhook', function (req, res) {
   var usersRef = ref.child("commits");
-  if (JSON.parse(req.body.payload).head_commit.modified.length > 2) {
+  if (JSON.parse(req.body.payload).head_commit.modified.length > 750) {
     usersRef.push().set(JSON.parse(req.body.payload).head_commit);
   }
   res.send('ok')

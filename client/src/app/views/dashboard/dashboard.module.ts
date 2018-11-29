@@ -9,6 +9,7 @@ import { ApplicationPipesModule } from '../../application-pipes.module';
 import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { NotifierModule } from 'angular-notifier';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { NotifierModule } from 'angular-notifier';
     ButtonsModule.forRoot(),
     CommonModule,
     NotifierModule,
-    ApplicationPipesModule
+    ApplicationPipesModule,
+    NgSelectModule
   ],
   declarations: [ DashboardComponent ]
 })

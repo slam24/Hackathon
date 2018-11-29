@@ -3,6 +3,7 @@ import { DataService } from '../../services/data.service';
 import { Organization } from '../../shared/models/organization.model';
 import { Language } from '../../shared/models/language.model';
 import { Store } from '@ngrx/store';
+import * as c3 from 'c3';
 
 import { NotifierService } from 'angular-notifier';
 
@@ -27,6 +28,15 @@ export class DashboardComponent implements OnInit {
   public commitsFB: any;
   private readonly notifier: NotifierService;
   private coins: Observable<any[]>;
+  public selectedSimpleItem: any;
+  //graph
+  public columns: any[] = [];
+  private first: number = 100;
+  private last: number = null;
+  private after: string = null;
+  private before: string = null;
+  private limit: number = 100;
+  private pageInfo: object;
 
   constructor(private data: DataService, db: AngularFireDatabase, notifierService: NotifierService, private store: Store<AppState> ) {
     this.notifier = notifierService;
@@ -42,10 +52,10 @@ export class DashboardComponent implements OnInit {
       });
     });
 
-    this.coins = this.store.select(state => state.blockchain);
   }
 
   ngOnInit() {
+    this.coins = this.store.select(state => state.blockchain);
 
     this.data.getInfoquery('infodashboard').subscribe(
       data => {
@@ -80,5 +90,36 @@ export class DashboardComponent implements OnInit {
         });
       }
     );
+  }
+
+  loadGraph(){
+    if (this.selectedSimpleItem) {
+      console.log(this.selectedSimpleItem.split(" ")[1])
+      this.data.getGraph('getGraph', this.selectedSimpleItem.split(" ")[1], this.first, this.last, this.after, this.before).subscribe(
+        data => {
+          if (data['repository']['ref'] != null) {
+            var aux = []
+            aux.push(this.selectedSimpleItem.split(" ")[1])
+            this.pageInfo =  data['repository']['ref']['target']['history']['pageInfo']
+            data['repository']['ref']['target']['history']['edges'].forEach(commit => {
+              aux.push(commit.node.additions)
+            })
+
+            aux.sort(function(a, b) {
+              return parseFloat(String(b)) - parseFloat(String(a))
+            });
+
+            this.columns.push(aux)
+
+            let chart = c3.generate({
+              bindto: '#chart',
+              data: {
+                columns: this.columns 
+              }
+            });
+          }
+        }
+      );
+    }
   }
 }

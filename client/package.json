@@ -41,6 +41,7 @@
     "@coreui/coreui": "^2.0.20",
     "@coreui/coreui-plugin-chartjs-custom-tooltips": "^1.2.0",
     "@coreui/icons": "0.3.0",
+    "@ng-select/ng-select": "^2.12.1",
     "@ngrx/core": "^1.2.0",
     "@ngrx/store": "^6.1.2",
     "@types/c3": "^0.6.2",
