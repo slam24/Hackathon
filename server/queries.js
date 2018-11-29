@@ -1,32 +1,34 @@
-var infolayout = `
-query {
-  organization(login: "IHack2018") {
-    name,
-    url,
-    teams(first:10) {
-      edges {
-        node {
-          id,
-          name,
-          slug,
-          repositories(first:10){
-            totalCount,
-            edges{
-              node{
-                name
+function infolayout(organization){
+  return `
+  query {
+    organization(login: "${organization}") {
+      name,
+      url,
+      teams(first:10) {
+        edges {
+          node {
+            id,
+            name,
+            slug,
+            repositories(first:10){
+              totalCount,
+              edges{
+                node{
+                  name
+                }
               }
             }
           }
         }
       }
     }
-  }
-}`
+  }`
+}
 
-function infoteam(slug){
+function infoteam(slug, organization){
   return  `
   query {
-    organization(login: "IHack2018") {
+    organization(login: "${organization}") {
       team(slug: "${slug}") {
         members(first: 10){
           totalCount,
@@ -66,186 +68,52 @@ function infoteam(slug){
   }`
 }
 
-var infodashboard = `
-query {
-  organization(login: "IHack2018") {
-    teams(first:10) {
-      totalCount,
-      edges {
-        node {
-          members(first: 10){
-            totalCount
-          },
-          repositories(first:10){
-            totalCount,
-            edges{
-              node{
-                name,
-                url
-                ref(qualifiedName: "master") {
-                  target {
-                    ... on Commit {
-                      additions,
-                      history(first: 1) {
-                        totalCount
-                        edges {
-                          node {
-                            messageHeadline,
-                            committedDate,
-                            deletions,
-                            additions,
-                            committer {
-                              avatarUrl,
-                              email,
-                              name
+function infodashboard(organization){
+  return `
+  query {
+    organization(login: "${organization}") {
+      teams(first:10) {
+        totalCount,
+        edges {
+          node {
+            members(first: 10){
+              totalCount
+            },
+            repositories(first:10){
+              totalCount,
+              edges{
+                node{
+                  name,
+                  url
+                  ref(qualifiedName: "master") {
+                    target {
+                      ... on Commit {
+                        additions,
+                        history(first: 1) {
+                          totalCount
+                          edges {
+                            node {
+                              messageHeadline,
+                              committedDate,
+                              deletions,
+                              additions,
+                              committer {
+                                avatarUrl,
+                                email,
+                                name
+                              }
                             }
                           }
                         }
                       }
                     }
-                  }
-                },
-                languages(first: 10){
-                  edges{
-                    node{
-                      id,
-                      color,
-                      name
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}`
-
-var initialQuery = `
-query {
-  organization(login: "IHack2018") {
-    name,
-    url,
-    teams(first:10) {
-      totalCount,
-      edges {
-        node {
-          id,
-          name,
-          description,
-          members(first: 10){
-            totalCount,
-            edges{
-              node{
-                login,
-                name,
-                email,
-                avatarUrl
-              }
-            }
-          },
-          repositories(first:10){
-            edges{
-              node{
-                id,
-                name,
-                url,
-                description,
-                descriptionHTML,
-                ref(qualifiedName: "master") {
-                  target {
-                    ... on Commit {
-                      additions,
-                      history(first: 1) {
-                        totalCount
-                        edges {
-                          node {
-                            oid
-                            messageHeadline
-                          }
-                        }
-                      }
-                    }
-                  }
-                },
-                languages(first: 10){
-                  edges{
-                    node{
-                      id,
-                      color,
-                      name
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}`
-
-var initialQuery1 = `
-query {
-  organization(login: "IHack2018") {
-    name,
-    url,
-    teams(first:10) {
-      edges {
-        node {
-          name,
-          description,
-          members(first: 10){
-            edges{
-              node{
-                name,
-                email,
-                avatarUrl,
-                pullRequests(first: 10){
-                  totalCount
-                }
-              }
-            }
-          },
-          repositories(first:10){
-            edges{
-              node{
-                name,
-                description,
-                descriptionHTML,
-                collaborators(first: 10){
-                  totalCount,
-                  edges{
-                    node{
-                      name,
-                      email,
-                      avatarUrl
-                    }
-                  }
-                },
-                languages(first: 10){
-                  edges{
-                    node{
-                      id,
-                      color,
-                      name
-                    }
-                  }
-                },
-                ref(qualifiedName: "master") {
-                  target {
-                    ... on Commit {
-                      additions,
-                      history(last: 10) {
-                        edges {
-                          node {
-                            oid
-                            messageHeadline
-                          }
-                        }
+                  },
+                  languages(first: 10){
+                    edges{
+                      node{
+                        id,
+                        color,
+                        name
                       }
                     }
                   }
@@ -256,15 +124,15 @@ query {
         }
       }
     }
-  }
-}`
+  }`
+}
 
-function getGraph(repo, first = null, last = null, after = null, before = null){
+function getGraph(repo, first = null, last = null, after = null, before = null, organization){
   if (String(after) != 'null') after = '"'+after+'"'
   if (String(before) != 'null') before = '"'+before+'"'
   return `
   query {
-    repository(name: "${repo}", owner: "IHack2018") {
+    repository(name: "${repo}", owner: "${organization}") {
       ref(qualifiedName: "master") {
         id,
         target {

@@ -38,7 +38,7 @@ router.get('/', (req, res) => {
 router.get('/getGraph', cors(corsOptions), (req, res) => {
   fetch('https://api.github.com/graphql', {
     method: 'POST',
-    body: JSON.stringify({query: getGraph(req.query.repo, req.query.first, req.query.last, req.query.after, req.query.before)}),
+    body: JSON.stringify({query: getGraph(req.query.repo, req.query.first, req.query.last, req.query.after, req.query.before, req.query.organization)}),
     headers: {
       'Authorization': `Bearer ${process.env.ACCESS_TOKEN_GITHUB}`,
     },
@@ -50,7 +50,7 @@ router.get('/getGraph', cors(corsOptions), (req, res) => {
 router.get('/infolayout', cors(corsOptions), (req, res) => {
   fetch('https://api.github.com/graphql', {
     method: 'POST',
-    body: JSON.stringify({query: infolayout}),
+    body: JSON.stringify({query: infolayout(req.query.organization)}),
     headers: {
       'Authorization': `Bearer ${process.env.ACCESS_TOKEN_GITHUB}`,
     },
@@ -62,7 +62,7 @@ router.get('/infolayout', cors(corsOptions), (req, res) => {
 router.get('/infodashboard', cors(corsOptions), (req, res) => {
   fetch('https://api.github.com/graphql', {
     method: 'POST',
-    body: JSON.stringify({query: infodashboard}),
+    body: JSON.stringify({query: (infodashboard(req.query.organization))}),
     headers: {
       'Authorization': `Bearer ${process.env.ACCESS_TOKEN_GITHUB}`,
     },
@@ -74,7 +74,7 @@ router.get('/infodashboard', cors(corsOptions), (req, res) => {
 router.get('/infoteam', cors(corsOptions), (req, res) => {
   fetch('https://api.github.com/graphql', {
     method: 'POST',
-    body: JSON.stringify({query: infoteam(req.query.slug)}),
+    body: JSON.stringify({query: infoteam(req.query.slug, req.query.organization)}),
     headers: {
       'Authorization': `Bearer ${process.env.ACCESS_TOKEN_GITHUB}`,
     },
@@ -84,15 +84,14 @@ router.get('/infoteam', cors(corsOptions), (req, res) => {
 })
 
 router.get('/getMostCommiter', cors(corsOptions), (req, res) => {
-
-  var repos = [ "Caribbean-Digital", "Caribbean-Digital2", "Elemental-Brainers", "Elemental-Brainers2", "DeathCode", "CodeBrain" ]
+  var repos = JSON.parse(req.query.repos)
 
   const start = async () => {
    var auxas = []
    var count = 0;
    await repos.forEach(function(repo, index) {
 
-    fetch('https://api.github.com/repos/IHack2018/'+repo+'/stats/contributors', {
+    fetch('https://api.github.com/repos/'+req.query.organization+'/'+repo.repo.split(" ")[1]+'/stats/contributors', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${process.env.ACCESS_TOKEN_GITHUB}`,

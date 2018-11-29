@@ -4,6 +4,7 @@ import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import { DataService } from '../../services/data.service';
 import * as c3 from 'c3';
+import { environment } from '../../../environments/environment';
 
 @Component({
   templateUrl: 'team.component.html'
@@ -23,7 +24,7 @@ export class TeamComponent implements OnInit {
 
   constructor(private data: DataService, private route: ActivatedRoute) {
     route.params.subscribe(val => {
-      this.data.getInfoqueryById('infoteam', this.route.snapshot.paramMap.get('slug')).subscribe(
+      this.data.getInfoqueryById('infoteam', this.route.snapshot.paramMap.get('slug'), environment.organization).subscribe(
         data => {
           this.repositories = data['organization']['team']['repositories']['edges']
           this.members = data['organization']['team']['members']['edges']
@@ -54,7 +55,7 @@ export class TeamComponent implements OnInit {
       if (this.before || this.after) {
         this.clear()
       }
-      this.data.getGraph('getGraph', repo, this.first, this.last, this.after, this.before).subscribe(
+      this.data.getGraph('getGraph', repo, this.first, this.last, this.after, this.before, environment.organization).subscribe(
         data => {
           if (data['repository']['ref'] != null) {
             var aux = []
@@ -99,7 +100,7 @@ export class TeamComponent implements OnInit {
   }
 
   loadGraph(repo){
-    this.data.getGraph('getGraph', repo, this.first, this.last, this.before, this.after).subscribe(
+    this.data.getGraph('getGraph', repo, this.first, this.last, this.before, this.after, environment.organization).subscribe(
       data => {
         var aux = []
         this.columns = []

@@ -9,23 +9,34 @@ import { environment } from '../../environments/environment';
 export class DataService {
   constructor(private http: HttpClient) { }
 
-  getInfoquery(query) {
-    return this.http.get(environment.baseURL+'/'+query)
-  }
-
-  getInfoqueryById(query, slug) {
-    return this.http.get<Organization>(environment.baseURL+'/'+query, {params: {
-      slug: slug
+  getInfoquery(query, organization) {
+    return this.http.get(environment.baseURL+'/'+query, {params: {
+      organization: organization
     }})
   }
 
-  getGraph(query, repo, first, last, before, after){
+  getInfoCommiters(query, repos, organization) {
+    return this.http.get<Organization>(environment.baseURL+'/'+query, {params: {
+      repos: repos,
+      organization: organization
+    }})
+  }
+
+  getInfoqueryById(query, slug, organization) {
+    return this.http.get<Organization>(environment.baseURL+'/'+query, {params: {
+      slug: slug,
+      organization: organization
+    }})
+  }
+
+  getGraph(query, repo, first, last, before, after, organization){
     return this.http.get<Organization>(environment.baseURL+'/'+query, {params: {
       repo: repo,
       first: first,
       last: last,
       before: before,
-      after: after
+      after: after,
+      organization: organization
     }})
   }
 }

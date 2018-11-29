@@ -4,6 +4,7 @@ import { Organization } from '../../shared/models/organization.model';
 import { Language } from '../../shared/models/language.model';
 import { Store } from '@ngrx/store';
 import * as c3 from 'c3';
+import { environment } from '../../../environments/environment';
 
 import { NotifierService } from 'angular-notifier';
 
@@ -57,7 +58,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.coins = this.store.select(state => state.blockchain);
 
-    this.data.getInfoquery('infodashboard').subscribe(
+    this.data.getInfoquery('infodashboard', environment.organization).subscribe(
       data => {
         var vm = this
         vm.teams = data['organization']['teams'].totalCount
@@ -94,32 +95,54 @@ export class DashboardComponent implements OnInit {
 
   loadGraph(){
     if (this.selectedSimpleItem) {
-      console.log(this.selectedSimpleItem.split(" ")[1])
-      this.data.getGraph('getGraph', this.selectedSimpleItem.split(" ")[1], this.first, this.last, this.after, this.before).subscribe(
-        data => {
-          if (data['repository']['ref'] != null) {
-            var aux = []
-            aux.push(this.selectedSimpleItem.split(" ")[1])
-            this.pageInfo =  data['repository']['ref']['target']['history']['pageInfo']
-            data['repository']['ref']['target']['history']['edges'].forEach(commit => {
-              aux.push(commit.node.additions)
-            })
-
-            aux.sort(function(a, b) {
-              return parseFloat(String(b)) - parseFloat(String(a))
-            });
-
-            this.columns.push(aux)
-
-            let chart = c3.generate({
-              bindto: '#chart',
-              data: {
-                columns: this.columns 
-              }
-            });
-          }
+      var show = true
+      this.columns.forEach(graph => {
+        if (graph[0] == this.selectedSimpleItem.split(" ")[1]) {
+          show = false
         }
-      );
+      })
+
+      if (show) {
+        this.data.getGraph('getGraph', this.selectedSimpleItem.split(" ")[1], this.first, this.last, this.after, this.before, environment.organization).subscribe(
+          data => {
+            if (data['repository']['ref'] != null) {
+              var aux = []
+              aux.push(this.selectedSimpleItem.split(" ")[1])
+              this.pageInfo =  data['repository']['ref']['target']['history']['pageInfo']
+              data['repository']['ref']['target']['history']['edges'].forEach(commit => {
+                aux.push(commit.node.additions)
+              })
+
+              aux.sort(function(a, b) {
+                return parseFloat(String(b)) - parseFloat(String(a))
+              });
+
+              this.columns.push(aux)
+
+              let chart = c3.generate({
+                bindto: '#chart',
+                data: {
+                  columns: this.columns 
+                }
+              });
+            }
+          }
+        );
+      }
     }
+  }
+
+  clear(){
+    this.before = null
+    this.after = null
+    this.last = null
+    this.first = 100
+    this.columns = []
+    let chart = c3.generate({
+      bindto: '#chart',
+      data: {
+        columns: this.columns 
+      }
+    });
   }
 }

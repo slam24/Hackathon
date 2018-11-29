@@ -4,6 +4,7 @@ import { DataService } from '../../services/data.service';
 import { Organization } from '../../shared/models/organization.model';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
+import { environment } from '../../../environments/environment';
 
 export interface AppState {
   readonly blockchain: any[];
@@ -21,6 +22,7 @@ export class DefaultLayoutComponent {
   public org: Organization;
   public bestCommitters: object;
   private coins: Observable<any[]>;
+  private teams: any[] = [];
 
   constructor(private data: DataService, private store: Store<AppState>) {
 
@@ -37,28 +39,27 @@ export class DefaultLayoutComponent {
   ngOnInit() {
     this.coins = this.store.select(state => state.blockchain);
 
-    this.data.getInfoquery('infolayout').subscribe(
+    this.data.getInfoquery('infolayout', environment.organization).subscribe(
       data => {
         this.org = data['organization']
-        var aux = []
         data['organization']['teams']['edges'].forEach(team => {
 
           team.node.repositories.edges.forEach(repo =>{
-            aux.push({'repo':team.node.name+' '+repo.node.name})
+            this.teams.push({'repo':team.node.name+' '+repo.node.name})
           })
           navItems.push({name:team.node.name,url:'/team/'+team.node.slug,icon:'fa fa-users'})
         });
 
         this.store.dispatch({
           type: 'ADD_COIN',
-          payload: <any> aux
+          payload: <any> this.teams
         });
       }
     );
   }
 
   getCommitters(){
-    this.data.getInfoquery('getMostCommiter').subscribe(
+    this.data.getInfoCommiters('getMostCommiter', JSON.stringify(this.teams), environment.organization).subscribe(
       data => {
         this.bestCommitters = data;
       }
