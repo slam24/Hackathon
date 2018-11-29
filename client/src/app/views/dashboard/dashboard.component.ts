@@ -28,7 +28,7 @@ export class DashboardComponent implements OnInit {
   public app: any;
   public commitsFB: any;
   private readonly notifier: NotifierService;
-  private coins: Observable<any[]>;
+  public coins: Observable<any[]>;
   public selectedSimpleItem: any;
   //graph
   public columns: any[] = [];
