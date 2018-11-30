@@ -15,5 +15,5 @@ export const environment = {
   },
   baseURL: "https://inatec-hackathon-2018.herokuapp.com",
   githubAPI: "https://api.github.com/repos",
-  organization: "IHack2018"
+  organization: "hackathon-nic-2018"
 };

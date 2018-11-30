@@ -4,7 +4,7 @@ function infolayout(organization){
     organization(login: "${organization}") {
       name,
       url,
-      teams(first:10) {
+      teams(first:35) {
         edges {
           node {
             id,
@@ -72,7 +72,7 @@ function infodashboard(organization){
   return `
   query {
     organization(login: "${organization}") {
-      teams(first:10) {
+      teams(first:35) {
         totalCount,
         edges {
           node {
