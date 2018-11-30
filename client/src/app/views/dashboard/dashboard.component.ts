@@ -66,7 +66,9 @@ export class DashboardComponent implements OnInit {
           vm.members += team.node.members.totalCount
           vm.repositories += team.node.repositories.totalCount
           team.node.repositories.edges.forEach(repository => {
-             vm.commits += repository.node.ref.target.history.totalCount //<-
+            if (repository.node.ref) {
+               vm.commits += repository.node.ref.target.history.totalCount //<-
+            }
              vm.lastcommits.push(repository) //<-
              repository.node.languages.edges.forEach(language => {
                if (vm.languages.length > 0) {
@@ -97,17 +99,18 @@ export class DashboardComponent implements OnInit {
     if (this.selectedSimpleItem) {
       var show = true
       this.columns.forEach(graph => {
-        if (graph[0] == this.selectedSimpleItem.split(" ")[1]) {
+        if (graph[0] == this.selectedSimpleItem.split("--")[1]) {
           show = false
         }
       })
 
       if (show) {
-        this.data.getGraph('getGraph', this.selectedSimpleItem.split(" ")[1], this.first, this.last, this.after, this.before, environment.organization).subscribe(
+        this.data.getGraph('getGraph', this.selectedSimpleItem.split("--")[1], this.first, this.last, this.after, this.before, environment.organization).subscribe(
           data => {
-            if (data['repository']['ref'] != null) {
+            console.log(data['repository'])
+            if (data['repository'] !== null) {
               var aux = []
-              aux.push(this.selectedSimpleItem.split(" ")[1])
+              aux.push(this.selectedSimpleItem.split("--")[1])
               this.pageInfo =  data['repository']['ref']['target']['history']['pageInfo']
               data['repository']['ref']['target']['history']['edges'].forEach(commit => {
                 aux.push(commit.node.additions)

@@ -45,7 +45,7 @@ export class DefaultLayoutComponent {
         data['organization']['teams']['edges'].forEach(team => {
 
           team.node.repositories.edges.forEach(repo =>{
-            this.teams.push({'repo':team.node.name+' '+repo.node.name})
+            this.teams.push({'repo':team.node.name+'--'+repo.node.name})
           })
           navItems.push({name:team.node.name,url:'/team/'+team.node.slug,icon:'fa fa-users'})
         });
