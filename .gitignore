@@ -1,3 +1,6 @@
 /node_modules
 package-lock.json
 ngx-admin
+.env
+public/client/*
+service-account.json

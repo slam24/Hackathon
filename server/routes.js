@@ -11,7 +11,7 @@ app.use(express.static('public/'))
 const router = express.Router()
 const { getGraph, infolayout, infodashboard, infoteam } = require('./queries.js')
 
-var whitelist = ['http://localhost:4200', 'http://localhost:3000', 'https://inatec-hackathon-2018.herokuapp.com']
+var whitelist = process.env.WHITE_LIST.split(',')
 var corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
@@ -21,11 +21,11 @@ var corsOptions = {
     }
   }
 }
-var serviceAccount = require("../hackathon2018-8ee72-firebase-adminsdk-a65w8-ff81cdee22.json");
+var serviceAccount = require("../service-account.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://hackathon2018-8ee72.firebaseio.com"
+  databaseURL: process.env.DATABASE_URL
 });
 
 var db = admin.database();
