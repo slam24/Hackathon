@@ -2,7 +2,11 @@
 
 Summary of the repositories of an organization on github.
 
-![](https://img.shields.io/badge/Angular-6.1.10-blue.svg) ![](https://img.shields.io/badge/Express-4.16.4-green.svg)
+![](https://img.shields.io/badge/Angular-6.1.10-blue.svg)
+![](https://img.shields.io/badge/Express-4.16.4-green.svg)
+
+## Hackathon's
+* [HackathonNicaragua2018 - Summary](https://inatec-hackathon-2018.herokuapp.com/#/dashboard)
 
 ## Table of Contents
 
