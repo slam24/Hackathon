@@ -7,7 +7,7 @@ Summary of the repositories of an organization on github.
 
 ## Hackathon's
 * [HackathonNicaragua2018 - Summary](https://inatec-hackathon-2018.herokuapp.com/#/dashboard)
-* [HackathonNicaragua2018 - Summary](https://inatec-hackathon-2019.herokuapp.com/#/dashboard)
+* [HackathonNicaragua2019 - Summary](https://inatec-hackathon-2019.herokuapp.com/#/dashboard)
 
 ## Table of Contents
 
