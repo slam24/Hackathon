@@ -24,7 +24,7 @@
     "express": "^4.16.4",
     "firebase-admin": "^6.1.0",
     "font-awesome": "^4.7.0",
-    "node-fetch": "^2.2.0"
+    "node-fetch": "^3.1.1"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
